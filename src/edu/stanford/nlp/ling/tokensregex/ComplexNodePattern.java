@@ -1,5 +1,6 @@
 package edu.stanford.nlp.ling.tokensregex;
 
+import edu.stanford.nlp.ie.KBPTokensregexExtractor;
 import edu.stanford.nlp.util.CollectionUtils;
 import edu.stanford.nlp.util.Pair;
 import edu.stanford.nlp.util.StringUtils;
@@ -67,7 +68,7 @@ public class ComplexNodePattern<M,K> extends NodePattern<M> {
       String value = attributes.get(attr);
       K c = getKey.apply(Pair.makePair(env, attr));
       if (c != null) {
-        if (value.startsWith("\"?") && value.endsWith("\"")) {
+        if (value.startsWith("\"=") && value.endsWith("\"")) {
           value = value.substring(2, value.length() - 1);
           value = value.replaceAll("\\\\\"", "\""); // Unescape quotes...
           p.add(c, new ArrayAnnotationPattern(value));
@@ -297,7 +298,6 @@ public class ComplexNodePattern<M,K> extends NodePattern<M> {
         public boolean match(ArrayList tab) {
             if(tab == null) return false;
             Iterator<String> it = tab.iterator();
-            System.err.print("found skos broader token in :");
             while (it.hasNext()) {
                 String s = it.next();
                 if(s.equals(this.parentNode)){
@@ -306,17 +306,6 @@ public class ComplexNodePattern<M,K> extends NodePattern<M> {
             }
             return false;
         }
-
-       /* public boolean  matchWithResult(ArrayList tab) {
-            if(tab == null) return false;
-            Iterator<String> it = tab.iterator();
-            System.err.print("found skos broader token in :");
-            while (it.hasNext()) {
-                String s = it.next();
-                if(s == this.parentNode)return true;
-            }
-            return false;
-        }*/
     }
 
   public static abstract class AbstractStringAnnotationPattern extends NodePattern<String> {
